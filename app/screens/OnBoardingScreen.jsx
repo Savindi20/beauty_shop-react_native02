@@ -1,33 +1,92 @@
-import React from 'react';
-import { Text, Dimensions, StyleSheet, View, Image } from 'react-native';
-import { SwiperFlatList } from 'react-native-swiper-flatlist';
+import { View, Text, Image } from "react-native";
+import React, { useEffect } from "react";
 
-const OnBoardingScreen = () => (
-  <View style={styles.container}>
-    <SwiperFlatList autoplay autoplayDelay={2} autoplayLoop index={2}>
-      <View style={[styles.child]}>
-        <Text style={styles.text}>1</Text>
-        <Image source={require('../assets/screen1.png')}></Image>
-      </View>
-      <View style={[styles.child]}>
-        <Text style={styles.text}>2</Text>
-      </View>
-      <View style={[styles.child]}>
-        <Text style={styles.text}>3</Text>
-      </View>
-      <View style={[styles.child]}>
-        <Text style={styles.text}>4</Text>
-      </View>
-    </SwiperFlatList>
-  </View>
-);
+import Swiper from "react-native-swiper";
+import { Brand, Screen1, Screen2, Screen3 } from "../assets";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const { width } = Dimensions.get('window');
+const OnBoardingScreen = () => {
+  const navigation = useNavigation();
 
-const styles = StyleSheet.create({
-  container: { flex: 1},
-  child: { width, justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.1)' },
-  text: { fontSize: width * 0.5, textAlign: 'center' },
-});
+  useEffect(() => {
+    const checkOnboardingStatus = async () => {
+      const value = await AsyncStorage.getItem("@onboarding_complete");
+      if (value !== null && value === "true") {
+        navigation.replace("Home");
+      }
+    };
+
+    checkOnboardingStatus();
+  }, []);
+
+  const handleOnboardingComplete = async (e) => {
+    console.log("Triggered  :", e);
+    if (e === 2) {
+      try {
+        await AsyncStorage.setItem("@onboarding_complete", "true");
+        navigation.navigate("Home");
+      } catch (error) {
+        console.log("Error on storing onboarding status : ", error);
+      }
+    }
+  };
+
+  return (
+    <View className="flex-1 items-center justify-center bg-white">
+      <Swiper onIndexChanged={handleOnboardingComplete}>
+        <ScreenOne />
+        <ScreenTwo />
+        <ScreenThree />
+      </Swiper>
+    </View>
+  );
+};
+
+export const ScreenOne = () => {
+  return (
+    <View className="flex-1 items-center justify-center relative">
+      <Image source={Screen1} className="w-full h-full" resizeMode="cover" />
+      <View className="w-56 h-auto flex items-center justify-center p-2 absolute left-4 top-36">
+        <Image source={Brand} className="w-32 h-32" resizeMode="contain" />
+        <Text className="text-xl font-semibold text-[#555]">
+          Enchant Beauty
+        </Text>
+      </View>
+    </View>
+  );
+};
+
+export const ScreenTwo = () => {
+  return (
+    <View className="flex-1 space-y-6 items-center justify-start ">
+      <Image source={Screen2} className="w-full h-[65%]" resizeMode="cover" />
+      <View className="flex items-center justify-center px-6 space-y-6">
+        <Text className="text-2xl tracking-wider text-[#555] ">
+          Find your Beauty Products
+        </Text>
+        <Text className="text-xl tracking-wider text-[#777] text-center">
+          Beauty begins the moment you decide to be yourself
+        </Text>
+      </View>
+    </View>
+  );
+};
+
+export const ScreenThree = () => {
+  return (
+    <View className="flex-1 space-y-6 items-center justify-start ">
+      <Image source={Screen3} className="w-full h-[65%]" resizeMode="cover" />
+      <View className="flex items-center justify-center px-6 space-y-6">
+        <Text className="text-2xl tracking-wider text-[#555] ">
+          Find your Beauty Products
+        </Text>
+        <Text className="text-xl tracking-wider text-[#777] text-center">
+          Beauty begins the moment you decide to be yourself
+        </Text>
+      </View>
+    </View>
+  );
+};
 
 export default OnBoardingScreen;
