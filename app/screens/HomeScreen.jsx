@@ -15,6 +15,7 @@ import { Screen3 } from "../assets";
 import { fetchFeeds } from "../sanity";
 import { useDispatch, useSelector } from "react-redux";
 import { SET_FEEDS } from "../context/actions/feedsActions";
+
 import { Feeds } from "../components";
 
 const HomeScreen = () => {
@@ -22,6 +23,7 @@ const HomeScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const feeds = useSelector((state) => state.feeds);
+  const [filtered, setFiltered] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -34,10 +36,10 @@ const HomeScreen = () => {
   useEffect(() => {
     setIsLoading(true);
     try {
-      fetchFeeds().then(res => {
+      fetchFeeds().then((res) => {
         // console.log(res);
         dispatch(SET_FEEDS(res));
-        console.log("Feeds from Store : ",feeds?.feeds);
+        // console.log("Feeds from Store : ", feeds?.feeds);
         setInterval(() => {
           setIsLoading(false);
         }, 2000);
@@ -49,9 +51,10 @@ const HomeScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 items-center justify-Start bg-[#EBEA]">
+    <SafeAreaView className="flex-1 items-center justify-start bg-[#EBEAEF]">
       <View className="w-full flex-row items-center justify-between px-4 py-2">
-        <MaterialIcons name="menu" size={24} color="#555" />
+        <MaterialIcons name="chevron-left" size={32} color="#555" />
+
         <Image
           source={Screen3}
           className="w-12 h-12 rounded-xl"
@@ -79,18 +82,19 @@ const HomeScreen = () => {
 
       {/* scrollable container starts */}
       <ScrollView className="flex1 w-full">
-        {isLoading ? 
+        {isLoading ? (
           <View className="flex-1 h-80 items-center justify-center">
             <ActivityIndicator size={"large"} color={"teal"} />
           </View>
-         : <>
-            <Feeds feeds={feeds?.feeds} />
-          </>
-        }
+        ) : (
+          <Feeds
+            feeds={filtered || filtered?.length > 0 ? filtered : feeds?.feeds}
+          />
+        )}
       </ScrollView>
       {/* scrollable container ends */}
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default HomeScreen
+export default HomeScreen;
