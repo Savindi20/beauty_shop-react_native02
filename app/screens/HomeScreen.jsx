@@ -15,6 +15,7 @@ import { Screen3 } from "../assets";
 
 const HomeScreen = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleSearchTerm = (text) => {
     setSearchTerm(text);
@@ -50,6 +51,17 @@ const HomeScreen = () => {
         </TouchableOpacity>
       </View>
       {/* search box ends here */}
+
+      {/* scrollable container starts */}
+      <ScrollView className="flex1 w-full">
+        {isLoading ? 
+          <View className="flex-1 h-80 items-center justify-center">
+            <ActivityIndicator size={"large"} color={"teal"} />
+          </View>
+         : < ></>
+        }
+      </ScrollView>
+      {/* scrollable container ends */}
 
     </SafeAreaView>
   )
