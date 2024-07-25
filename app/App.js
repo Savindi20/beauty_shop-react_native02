@@ -4,7 +4,7 @@ import React from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { OnBoardingScreen, HomeScreen } from './screens';
+import { OnBoardingScreen, HomeScreen, ProductScreen } from './screens';
 import { Provider } from 'react-redux';
 
 import "react-native-url-polyfill/auto";
@@ -19,6 +19,7 @@ const app = () => {
       <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name='OnBoarding' component={OnBoardingScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="ProductScreen" component={ProductScreen} />
       </Stack.Navigator>
       </Provider>
     </NavigationContainer>
