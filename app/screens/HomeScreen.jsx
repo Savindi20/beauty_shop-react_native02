@@ -15,6 +15,7 @@ import { Screen3 } from "../assets";
 import { fetchFeeds } from "../sanity";
 import { useDispatch, useSelector } from "react-redux";
 import { SET_FEEDS } from "../context/actions/feedsActions";
+import { Feeds } from "../components";
 
 const HomeScreen = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -36,13 +37,13 @@ const HomeScreen = () => {
       fetchFeeds().then(res => {
         // console.log(res);
         dispatch(SET_FEEDS(res));
+        console.log("Feeds from Store : ",feeds?.feeds);
         setInterval(() => {
           setIsLoading(false);
         }, 2000);
       });
     } catch (error) {
       console.log(error);
-      console.log("Error fetching feeds : ",feeds);
       // setIsLoading(false);
     }
   }, []);
@@ -83,12 +84,11 @@ const HomeScreen = () => {
             <ActivityIndicator size={"large"} color={"teal"} />
           </View>
          : <>
-            <Text>Feeds</Text>
+            <Feeds feeds={feeds?.feeds} />
           </>
         }
       </ScrollView>
       {/* scrollable container ends */}
-
     </SafeAreaView>
   )
 }
