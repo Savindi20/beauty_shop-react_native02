@@ -13,10 +13,16 @@ import React, { useEffect, useState } from "react";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { Screen3 } from "../assets";
 import { fetchFeeds } from "../sanity";
+import { useDispatch, useSelector } from "react-redux";
+import { SET_FEEDS } from "../context/actions/feedsActions";
 
 const HomeScreen = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const feeds = useSelector((state) => state.feeds);
+
+  const dispatch = useDispatch();
 
   const handleSearchTerm = (text) => {
     setSearchTerm(text);
@@ -28,13 +34,15 @@ const HomeScreen = () => {
     setIsLoading(true);
     try {
       fetchFeeds().then(res => {
-        console.log(res);
+        // console.log(res);
+        dispatch(SET_FEEDS(res));
         setInterval(() => {
           setIsLoading(false);
         }, 2000);
       });
     } catch (error) {
       console.log(error);
+      console.log("Error fetching feeds : ",feeds);
       // setIsLoading(false);
     }
   }, []);
