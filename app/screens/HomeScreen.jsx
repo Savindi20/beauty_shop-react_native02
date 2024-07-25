@@ -8,20 +8,36 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { Screen3 } from "../assets";
+import { fetchFeeds } from "../sanity";
 
 const HomeScreen = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSearchTerm = (text) => {
     setSearchTerm(text);
 
     setFiltered(feeds?.feeds.filter((item) => item.title.includes(text)));
   };
+
+  useEffect(() => {
+    setIsLoading(true);
+    try {
+      fetchFeeds().then(res => {
+        console.log(res);
+        setInterval(() => {
+          setIsLoading(false);
+        }, 2000);
+      });
+    } catch (error) {
+      console.log(error);
+      // setIsLoading(false);
+    }
+  }, []);
 
   return (
     <SafeAreaView className="flex-1 items-center justify-Start bg-[#EBEA]">
@@ -58,7 +74,9 @@ const HomeScreen = () => {
           <View className="flex-1 h-80 items-center justify-center">
             <ActivityIndicator size={"large"} color={"teal"} />
           </View>
-         : < ></>
+         : <>
+            <Text>Feeds</Text>
+          </>
         }
       </ScrollView>
       {/* scrollable container ends */}
