@@ -4,7 +4,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 const FeedDetail = ({ data }) => {
-  const screenWidth = Math.round(Dimensions.get("window").width); 
+  const screenWidth = Math.round(Dimensions.get("window").width);
   const cardWidth = screenWidth / 2 - 20;
 
   const navigation = useNavigation();

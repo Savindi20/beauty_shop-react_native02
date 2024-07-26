@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AntDesign, Entypo, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { addtocart } from "../context/actions/cartActions";
 
 const ProductScreen = ({ route }) => {
   const { _id } = route.params;
@@ -40,6 +41,10 @@ const ProductScreen = ({ route }) => {
   const handleQty = (action) => {
     const newQty = qty + action;
     setQty(newQty >= 1 ? newQty : 1);
+  };
+
+  const handlePressCart = () => {
+    dispatch(addtocart({ data: data, qty: qty }));
   };
 
   return (
@@ -144,7 +149,7 @@ const ProductScreen = ({ route }) => {
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
-                  // onPress={handlePressCart}
+                  onPress={handlePressCart}
                   className="bg-black px-4 py-2 rounded-xl"
                 >
                   <Text className="text-base font-semibold text-gray-50">
